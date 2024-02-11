@@ -215,9 +215,9 @@ fun Calculation(male: Boolean, weight: Int, intensity: Float, setResult: (Int) -
     Button(
         onClick = {
             if(male) {
-                setResult((879 + (10.2 * weight) * intensity).toInt())
+                setResult(((879 + 10.2 * weight) * intensity).toInt())
             } else {
-                setResult((795 + (7.18 * weight) * intensity).toInt())
+                setResult(((795 + 7.18 * weight) * intensity).toInt())
             }
         },
         modifier = Modifier
