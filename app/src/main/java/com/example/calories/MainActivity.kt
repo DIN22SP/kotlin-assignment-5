@@ -76,7 +76,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CalorieScreen() {
     var weightInput by remember { mutableStateOf("") }
+    var  weight = weightInput.toIntOrNull() ?: 0
     var male by remember { mutableStateOf(true) }
+    var intensity by remember { mutableStateOf(1.3f) }
+    var result by remember { mutableStateOf(0) }
     Column (
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
@@ -87,28 +90,20 @@ fun CalorieScreen() {
         Heading(title = stringResource(R.string.calories))
         WeightField(weightInput = weightInput, onValueChange = { weightInput = it })
         GenderChoices(male, setGenderMale = { male = it } )
-
-
-
-
-        Button(
-            onClick = {
-                // Handle login
-            },
+        IntensityList(onClick = { intensity = it })
+        // result
+        Text(
+            text = "Calories: $result",
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .padding(10.dp)
                 .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-            shape = MaterialTheme.shapes.medium,
-        ) {
-            Text(
-                text = "CALCULATE",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(10.dp, 5.dp)
-            )
+                .padding(top = 16.dp, bottom = 16.dp),
+            textAlign = TextAlign.Center
+        )
+        Calculation(male, weight, intensity, setResult = { result = it })
 
-        }
     }
 }
 
@@ -211,6 +206,25 @@ fun IntensityList(onClick: (Float) -> Unit) {
                 )
             }
         }
+    }
+
+}
+
+@Composable
+fun Calculation(male: Boolean, weight: Int, intensity: Float, setResult: (Int) -> Unit) {
+    Button(
+        onClick = {
+            if(male) {
+                setResult((879 + (10.2 * weight) * intensity).toInt())
+            } else {
+                setResult((795 + (7.18 * weight) * intensity).toInt())
+            }
+        },
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+    ) {
+        Text(text = "CALCULATE")
     }
 
 }
